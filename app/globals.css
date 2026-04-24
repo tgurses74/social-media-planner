@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ── Light mode ─────────────────────────────────────── */
+:root {
+  /* Core */
+  --background:         oklch(0.985 0.002 265);
+  --foreground:         oklch(0.13 0.012 265);
+
+  /* Cards / Popovers */
+  --card:               oklch(1 0 0);
+  --card-foreground:    oklch(0.13 0.012 265);
+  --popover:            oklch(1 0 0);
+  --popover-foreground: oklch(0.13 0.012 265);
+
+  /* Primary — violet */
+  --primary:            oklch(0.47 0.22 273);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Secondary — soft violet tint */
+  --secondary:          oklch(0.94 0.03 273);
+  --secondary-foreground: oklch(0.32 0.12 273);
+
+  /* Muted — near-neutral */
+  --muted:              oklch(0.96 0.003 265);
+  --muted-foreground:   oklch(0.50 0.012 265);
+
+  /* Accent — light violet hover surface */
+  --accent:             oklch(0.94 0.03 273);
+  --accent-foreground:  oklch(0.32 0.12 273);
+
+  /* Semantic */
+  --destructive:        oklch(0.577 0.245 27.325);
+  --border:             oklch(0.88 0.006 265);
+  --input:              oklch(0.88 0.006 265);
+  --ring:               oklch(0.55 0.18 273);
+
+  /* Charts */
+  --chart-1: oklch(0.47 0.22 273);
+  --chart-2: oklch(0.60 0.18 220);
+  --chart-3: oklch(0.65 0.20 145);
+  --chart-4: oklch(0.72 0.18 55);
+  --chart-5: oklch(0.65 0.22 20);
+
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* Sidebar */
+  --sidebar:                    oklch(0.975 0.003 265);
+  --sidebar-foreground:         oklch(0.13 0.012 265);
+  --sidebar-primary:            oklch(0.47 0.22 273);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent:             oklch(0.94 0.03 273);
+  --sidebar-accent-foreground:  oklch(0.32 0.12 273);
+  --sidebar-border:             oklch(0.88 0.006 265);
+  --sidebar-ring:               oklch(0.55 0.18 273);
+}
+
+/* ── Dark mode — Colorffy scheme: #121212 surface, #151eca primary blue ── */
+.dark {
+  /* Core — pure neutral near-black (#121212), no violet tint */
+  --background:         oklch(0.09 0 0);
+  --foreground:         oklch(0.97 0 0);
+
+  /* Cards — #1e1e1e, clear +5 lightness step */
+  --card:               oklch(0.145 0 0);
+  --card-foreground:    oklch(0.97 0 0);
+  --popover:            oklch(0.18 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+
+  /* Primary — #151eca royal blue, H=245 so it reads clearly blue not violet */
+  --primary:            oklch(0.50 0.27 245);
+  --primary-foreground: oklch(0.98 0 0);
+
+  /* Secondary — deep blue-tinted surface */
+  --secondary:          oklch(0.18 0.028 245);
+  --secondary-foreground: oklch(0.90 0.05 245);
+
+  /* Muted — neutral dark surface / helper text */
+  --muted:              oklch(0.18 0 0);
+  --muted-foreground:   oklch(0.58 0 0);
+
+  /* Accent — hover surface with blue warmth */
+  --accent:             oklch(0.20 0.025 245);
+  --accent-foreground:  oklch(0.92 0.05 245);
+
+  /* Semantic — Colorffy palette */
+  --destructive:        oklch(0.50 0.19 22);   /* #9c2121 */
+  --success:            oklch(0.57 0.13 162);  /* #22946e */
+  --warning:            oklch(0.60 0.12 72);   /* #a87a2a */
+  --border:             oklch(1 0 0 / 10%);
+  --input:              oklch(1 0 0 / 14%);
+  --ring:               oklch(0.52 0.25 245);
+
+  /* Charts — blue-anchored palette */
+  --chart-1: oklch(0.50 0.27 245);
+  --chart-2: oklch(0.57 0.13 162);
+  --chart-3: oklch(0.60 0.12 72);
+  --chart-4: oklch(0.50 0.19 22);
+  --chart-5: oklch(0.70 0.18 210);
+
+  /* Sidebar — one step lighter than page bg */
+  --sidebar:                    oklch(0.115 0 0);
+  --sidebar-foreground:         oklch(0.97 0 0);
+  --sidebar-primary:            oklch(0.50 0.27 245);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent:             oklch(0.20 0.025 245);
+  --sidebar-accent-foreground:  oklch(0.92 0.05 245);
+  --sidebar-border:             oklch(1 0 0 / 8%);
+  --sidebar-ring:               oklch(0.52 0.25 245);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  h4, h5, h6 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+}

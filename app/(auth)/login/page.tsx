@@ -1,0 +1,10 @@
+import { LoginForm } from "./login-form";
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string; message?: string }>;
+}) {
+  const { next, message } = await searchParams;
+  return <LoginForm nextPath={next} message={message} />;
+}

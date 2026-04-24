@@ -1,0 +1,344 @@
+export type Locale = "en" | "tr";
+
+export const translations = {
+  en: {
+    locale: "en" as Locale,
+    dateLocale: "en-GB",
+
+    nav: {
+      today: "Today",
+      projects: "Projects",
+      settings: "Settings",
+    },
+
+    theme: {
+      lightMode: "Light mode",
+      darkMode: "Dark mode",
+    },
+
+    lang: {
+      toggle: "Türkçe",
+      current: "English",
+    },
+
+    auth: {
+      logout: "Log out",
+    },
+
+    dashboard: {
+      heading: "Today",
+      postsNeedAction: (n: number) =>
+        `· ${n} post${n !== 1 ? "s" : ""} need action`,
+      nothingScheduled: "Nothing scheduled for today",
+      checkProjects: "Check your",
+      projects: "projects",
+      toPlан: "to plan upcoming posts.",
+      openProject: "Open project →",
+      editAndPublish: "Edit & publish post",
+      caption: "Caption",
+      hashtags: "Hashtags (comma-separated, no #)",
+      media: "Media",
+      required: "Required",
+      removeMedia: "Remove media",
+      clickToUpload: "Click to upload media",
+      uploading: "Uploading…",
+      cancel: "Cancel",
+      save: "Save",
+      publishing: "Publishing…",
+      publishNow: "Publish Now",
+    },
+
+    projects: {
+      heading: "Projects",
+      subtitle: "Manage your event social media campaigns.",
+      newProject: "New Project",
+      noProjects: "No projects yet",
+      noProjectsSub: "Create your first event project to start planning.",
+      eventDate: "Event date",
+    },
+
+    projectDetail: {
+      backToProjects: "Projects",
+      eventDate: "Event date",
+      postingWindow: "Posting window",
+      platforms: "Platforms",
+      description: "Description",
+      documents: "Documents",
+      contentPlan: "Content Plan",
+    },
+
+    newProject: {
+      heading: "New Project",
+      subtitle:
+        "Upload an event brief to auto-fill details, or fill in the form manually.",
+      eventDocument: "Event document",
+      docHint: "(optional — PDF, image, Word, .txt, .md)",
+      extracting: "Extracting event info…",
+      clickToUploadDoc: "Click to upload — auto-fills fields below",
+      projectName: "Project name",
+      eventName: "Event name",
+      eventDate: "Event date",
+      language: "Language",
+      langEn: "English",
+      langTr: "Turkish",
+      description: "Description",
+      descPlaceholder: "Brief overview of the event…",
+      platforms: "Platforms",
+      postingTimeframe: "Posting timeframe",
+      start: "Start",
+      endEventDate: "End (event date)",
+      end: "End",
+      creating: "Creating…",
+      createProject: "Create Project",
+      cancel: "Cancel",
+      selectPlatform: "Select at least one platform.",
+    },
+
+    projectActions: {
+      editProject: "Edit Project",
+      editProjectTitle: "Edit project",
+      projectName: "Project name",
+      eventName: "Event name",
+      eventDate: "Event date",
+      language: "Language",
+      langEn: "English",
+      langTr: "Turkish",
+      description: "Description",
+      platforms: "Platforms",
+      postingWindow: "Posting window",
+      start: "Start",
+      end: "End",
+      cancel: "Cancel",
+      saveChanges: "Save changes",
+      delete: "Delete",
+      deleteTitle: "Delete project?",
+      deleteWarning: (name: string) =>
+        `This will permanently delete ${name} and all its posts and documents. This cannot be undone.`,
+      deleteProject: "Delete project",
+      selectPlatform: "Select at least one platform.",
+    },
+
+    contentPlan: {
+      noPlan: "No content plan yet",
+      noPlanSub: "Generate a full posting schedule with AI in one click",
+      generate: "Generate Content Plan",
+      generating: "Generating…",
+      postsAcross: (posts: number, dates: number) =>
+        `${posts} posts across ${dates} dates`,
+      regenerate: "Regenerate",
+      regenerating: "Regenerating…",
+      markPending: "Mark as pending",
+      publishNow: "Publish now",
+      edit: "Edit",
+      delete: "Delete",
+      editPost: "Edit post",
+      date: "Date",
+      caption: "Caption",
+      hashtags: "Hashtags (comma-separated, no #)",
+      media: "Media",
+      required: "Required",
+      removeMedia: "Remove media",
+      clickToUpload: "Click to upload media",
+      uploading: "Uploading…",
+      cancel: "Cancel",
+      save: "Save",
+      publishing: "Publishing…",
+      publishNowBtn: "Publish Now",
+      mediaReady: "· ✓ media ready",
+    },
+
+    settings: {
+      heading: "Settings",
+      subtitle: "Manage your connected accounts and preferences.",
+      connectedAccounts: "Connected Accounts",
+      dailyDigest: "Daily Digest Notifications",
+      connected: "Connected",
+      notConnected: "Not connected",
+      disconnect: "Disconnect",
+      connect: "Connect",
+      expires: "expires",
+      notifEmail: "Notification email",
+      notifEmailPlaceholder: "you@example.com",
+      notifEmailHint:
+        "Daily digest is sent here. Leave blank to use your login email.",
+      sendTime: "Send time (Istanbul / UTC+3)",
+      sendTimeHint:
+        "The cron runs at 05:00 UTC (08:00 Istanbul) by default. Adjusting this field only records your preference — the Vercel cron schedule is fixed in",
+      save: "Save",
+      saved: "Saved",
+    },
+  },
+
+  tr: {
+    locale: "tr" as Locale,
+    dateLocale: "tr-TR",
+
+    nav: {
+      today: "Bugün",
+      projects: "Projeler",
+      settings: "Ayarlar",
+    },
+
+    theme: {
+      lightMode: "Açık mod",
+      darkMode: "Koyu mod",
+    },
+
+    lang: {
+      toggle: "English",
+      current: "Türkçe",
+    },
+
+    auth: {
+      logout: "Çıkış yap",
+    },
+
+    dashboard: {
+      heading: "Bugün",
+      postsNeedAction: (n: number) =>
+        `· ${n} gönderi işlem bekliyor`,
+      nothingScheduled: "Bugün için planlanmış gönderi yok",
+      checkProjects: "Yaklaşan gönderileri planlamak için",
+      projects: "projelerinizi",
+      toPlан: "kontrol edin.",
+      openProject: "Projeyi aç →",
+      editAndPublish: "Gönderiyi düzenle ve yayınla",
+      caption: "Altyazı",
+      hashtags: "Hashtagler (virgülle ayrılmış, # olmadan)",
+      media: "Medya",
+      required: "Gerekli",
+      removeMedia: "Medyayı kaldır",
+      clickToUpload: "Medya yüklemek için tıklayın",
+      uploading: "Yükleniyor…",
+      cancel: "İptal",
+      save: "Kaydet",
+      publishing: "Yayınlanıyor…",
+      publishNow: "Şimdi Yayınla",
+    },
+
+    projects: {
+      heading: "Projeler",
+      subtitle: "Etkinlik sosyal medya kampanyalarınızı yönetin.",
+      newProject: "Yeni Proje",
+      noProjects: "Henüz proje yok",
+      noProjectsSub:
+        "Planlamaya başlamak için ilk etkinlik projenizi oluşturun.",
+      eventDate: "Etkinlik tarihi",
+    },
+
+    projectDetail: {
+      backToProjects: "Projeler",
+      eventDate: "Etkinlik tarihi",
+      postingWindow: "Paylaşım penceresi",
+      platforms: "Platformlar",
+      description: "Açıklama",
+      documents: "Belgeler",
+      contentPlan: "İçerik Planı",
+    },
+
+    newProject: {
+      heading: "Yeni Proje",
+      subtitle:
+        "Alanları otomatik doldurmak için etkinlik brifini yükleyin veya formu manuel olarak doldurun.",
+      eventDocument: "Etkinlik belgesi",
+      docHint: "(isteğe bağlı — PDF, resim, Word, .txt, .md)",
+      extracting: "Etkinlik bilgileri çıkarılıyor…",
+      clickToUploadDoc:
+        "Yüklemek için tıklayın — aşağıdaki alanları otomatik doldurur",
+      projectName: "Proje adı",
+      eventName: "Etkinlik adı",
+      eventDate: "Etkinlik tarihi",
+      language: "Dil",
+      langEn: "İngilizce",
+      langTr: "Türkçe",
+      description: "Açıklama",
+      descPlaceholder: "Etkinliğe kısa genel bakış…",
+      platforms: "Platformlar",
+      postingTimeframe: "Paylaşım zaman dilimi",
+      start: "Başlangıç",
+      endEventDate: "Bitiş (etkinlik tarihi)",
+      end: "Bitiş",
+      creating: "Oluşturuluyor…",
+      createProject: "Proje Oluştur",
+      cancel: "İptal",
+      selectPlatform: "En az bir platform seçin.",
+    },
+
+    projectActions: {
+      editProject: "Projeyi Düzenle",
+      editProjectTitle: "Projeyi düzenle",
+      projectName: "Proje adı",
+      eventName: "Etkinlik adı",
+      eventDate: "Etkinlik tarihi",
+      language: "Dil",
+      langEn: "İngilizce",
+      langTr: "Türkçe",
+      description: "Açıklama",
+      platforms: "Platformlar",
+      postingWindow: "Paylaşım penceresi",
+      start: "Başlangıç",
+      end: "Bitiş",
+      cancel: "İptal",
+      saveChanges: "Değişiklikleri kaydet",
+      delete: "Sil",
+      deleteTitle: "Proje silinsin mi?",
+      deleteWarning: (name: string) =>
+        `Bu işlem, ${name} projesini ve tüm gönderileri ile belgeleri kalıcı olarak silecek. Bu işlem geri alınamaz.`,
+      deleteProject: "Projeyi sil",
+      selectPlatform: "En az bir platform seçin.",
+    },
+
+    contentPlan: {
+      noPlan: "Henüz içerik planı yok",
+      noPlanSub:
+        "Yapay zeka ile tek tıklamayla tam paylaşım takvimi oluşturun",
+      generate: "İçerik Planı Oluştur",
+      generating: "Oluşturuluyor…",
+      postsAcross: (posts: number, dates: number) =>
+        `${posts} gönderi, ${dates} tarihte`,
+      regenerate: "Yeniden oluştur",
+      regenerating: "Yeniden oluşturuluyor…",
+      markPending: "Beklemede olarak işaretle",
+      publishNow: "Şimdi yayınla",
+      edit: "Düzenle",
+      delete: "Sil",
+      editPost: "Gönderiyi düzenle",
+      date: "Tarih",
+      caption: "Altyazı",
+      hashtags: "Hashtagler (virgülle ayrılmış, # olmadan)",
+      media: "Medya",
+      required: "Gerekli",
+      removeMedia: "Medyayı kaldır",
+      clickToUpload: "Medya yüklemek için tıklayın",
+      uploading: "Yükleniyor…",
+      cancel: "İptal",
+      save: "Kaydet",
+      publishing: "Yayınlanıyor…",
+      publishNowBtn: "Şimdi Yayınla",
+      mediaReady: "· ✓ medya hazır",
+    },
+
+    settings: {
+      heading: "Ayarlar",
+      subtitle: "Bağlı hesaplarınızı ve tercihlerinizi yönetin.",
+      connectedAccounts: "Bağlı Hesaplar",
+      dailyDigest: "Günlük Özet Bildirimleri",
+      connected: "Bağlandı",
+      notConnected: "Bağlı değil",
+      disconnect: "Bağlantıyı kes",
+      connect: "Bağlan",
+      expires: "son kullanma",
+      notifEmail: "Bildirim e-postası",
+      notifEmailPlaceholder: "siz@example.com",
+      notifEmailHint:
+        "Günlük özet buraya gönderilir. Giriş e-postanızı kullanmak için boş bırakın.",
+      sendTime: "Gönderim saati (İstanbul / UTC+3)",
+      sendTimeHint:
+        "Cron varsayılan olarak 05:00 UTC (08:00 İstanbul) saatinde çalışır. Bu alanı ayarlamak yalnızca tercihinizi kaydeder — Vercel cron zamanlaması sabittir:",
+      save: "Kaydet",
+      saved: "Kaydedildi",
+    },
+  },
+} as const;
+
+export type T = typeof translations.en | typeof translations.tr;
