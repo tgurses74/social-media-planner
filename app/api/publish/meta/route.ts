@@ -13,7 +13,11 @@ async function graphPost(path: string, body: Record<string, string>): Promise<Re
     body: JSON.stringify({ ...body, access_token: TOKEN }),
   });
   const data = await res.json();
-  if (data.error) throw new Error(`Meta API: ${data.error.message} (code ${data.error.code})`);
+  if (data.error) {
+    console.error("[Meta] graphPost error on", path, JSON.stringify(data.error));
+    const sub = data.error.error_subcode ? `/${data.error.error_subcode}` : "";
+    throw new Error(`Meta API: ${data.error.message} (code ${data.error.code}${sub})`);
+  }
   return data;
 }
 
@@ -21,17 +25,29 @@ async function graphGet(path: string, fields: string): Promise<Record<string, st
   const url = `${GRAPH}/${path}?fields=${fields}&access_token=${TOKEN}`;
   const res = await fetch(url);
   const data = await res.json();
-  if (data.error) throw new Error(`Meta API: ${data.error.message}`);
+  if (data.error) {
+    console.error("[Meta] graphGet error on", path, JSON.stringify(data.error));
+    const sub = data.error.error_subcode ? `/${data.error.error_subcode}` : "";
+    throw new Error(`Meta API: ${data.error.message} (code ${data.error.code}${sub})`);
+  }
   return data;
 }
 
-// Instagram video containers are processed asynchronously — poll until FINISHED.
+// Poll until FINISHED — required for ALL Instagram containers (images can also be async).
 async function waitForIgContainer(creationId: string): Promise<void> {
-  for (let i = 0; i < 20; i++) {
-    const data = await graphGet(creationId, "status_code");
+  for (let i = 0; i < 30; i++) {
+    const data = await graphGet(creationId, "status_code,status");
+    console.log(`[Meta] Container ${creationId} poll ${i + 1}:`, JSON.stringify(data));
     if (data.status_code === "FINISHED") return;
-    if (data.status_code === "ERROR") throw new Error("Instagram media processing failed");
-    await new Promise((r) => setTimeout(r, 3000));
+    if (data.status_code === "ERROR") {
+      throw new Error(
+        `Instagram media processing failed — check that the media URL is publicly accessible and the file format is supported (status: ${data.status ?? "unknown"})`,
+      );
+    }
+    if (data.status_code === "EXPIRED") {
+      throw new Error("Instagram media container expired before publishing");
+    }
+    await new Promise((r) => setTimeout(r, 2000));
   }
   throw new Error("Instagram media processing timed out (60s)");
 }
@@ -79,13 +95,14 @@ async function publishInstagram(
     containerBody = { media_type: "IMAGE", image_url: mediaUrl, caption };
   }
 
+  console.log("[Meta] Creating Instagram container:", JSON.stringify({ postType, videoMedia, mediaUrl }));
   const container = await graphPost(`${IG_ID}/media`, containerBody);
+  console.log("[Meta] Container created, ID:", container.id);
 
-  // Video containers need processing time before publishing
-  if (videoMedia || postType === "reel") {
-    await waitForIgContainer(container.id);
-  }
+  // Always poll — both images and videos can be async.
+  await waitForIgContainer(container.id);
 
+  console.log("[Meta] Publishing container:", container.id);
   const published = await graphPost(`${IG_ID}/media_publish`, { creation_id: container.id });
   return published.id;
 }
