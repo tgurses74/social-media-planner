@@ -122,13 +122,37 @@ export function ContentPlan({
     if (!file) return;
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await fetch("/api/upload-media", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setEditMediaUrl(data.url);
-      setEditMediaMime(data.mimeType);
+      const isVideo = file.type.startsWith("video/");
+
+      if (isVideo) {
+        // Videos: get a presigned URL, then PUT directly to R2 (bypasses Vercel 4.5 MB limit)
+        const presignRes = await fetch("/api/upload-media/presign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename: file.name, contentType: file.type }),
+        });
+        const presignData = await presignRes.json();
+        if (!presignRes.ok) throw new Error(presignData.error);
+
+        const putRes = await fetch(presignData.uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": file.type },
+          body: file,
+        });
+        if (!putRes.ok) throw new Error("Direct upload to storage failed");
+
+        setEditMediaUrl(presignData.publicUrl);
+        setEditMediaMime(presignData.mimeType);
+      } else {
+        // Images: proxy through Vercel API (small files, no size issue)
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/api/upload-media", { method: "POST", body: fd });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        setEditMediaUrl(data.url);
+        setEditMediaMime(data.mimeType);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Media upload failed");
     } finally {

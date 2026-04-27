@@ -1,4 +1,5 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const r2 = new S3Client({
   region: "auto",
@@ -23,4 +24,20 @@ export async function uploadToR2(
     }),
   );
   return `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${key}`;
+}
+
+/** Returns a short-lived presigned PUT URL for direct browser → R2 uploads (videos). */
+export async function getPresignedPutUrl(
+  key: string,
+  contentType: string,
+  expiresIn = 300, // 5 minutes
+): Promise<{ uploadUrl: string; publicUrl: string }> {
+  const command = new PutObjectCommand({
+    Bucket: process.env.R2_BUCKET_NAME!,
+    Key: key,
+    ContentType: contentType,
+  });
+  const uploadUrl = await getSignedUrl(r2, command, { expiresIn });
+  const publicUrl = `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${key}`;
+  return { uploadUrl, publicUrl };
 }
