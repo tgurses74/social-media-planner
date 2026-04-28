@@ -210,42 +210,31 @@ When we set up the `.env` file, you will need to paste in the following. All of 
 
 ## Development Phases
 
-### Phase 1 — Project Scaffold & Auth (Setup session, today)
-- Initialize git repo + push to GitHub
-- Create Next.js app + shadcn/ui
-- Connect Supabase Auth (login/logout/team invites)
-- Create PRD file in the project (`docs/PRD.md`)
-- Create `.env.example` template
-- Create initial `tools/` and `workflows/` directories
-- Basic layout with sidebar navigation
+### Phase 1 — Project Scaffold & Auth ✅ DONE
+- Git repo, Next.js app, shadcn/ui, Supabase Auth
+- PRD, `.env.example`, workflows, sidebar layout
 
-### Phase 2 — Project Management (Section 1, Part A)
-- Create / list / view projects
-- Upload documents → Gemini reads and extracts event info
-- User reviews extracted info
-- Platform and timeframe selection
+### Phase 2 — Project Management ✅ DONE
+- Projects CRUD, document upload → Cloudflare R2
+- Gemini extraction of event info
 
-### Phase 3 — AI Content Generation (Section 1, Part B)
+### Phase 3 — AI Content Generation ✅ DONE
 - Gemini generates full posting schedule
-- Editable content calendar (table + calendar views)
-- Per-post editing: caption, hashtags, media spec
-- Cancel / add posts manually
+- Editable content calendar with inline editing
 
-### Phase 4 — Media & Publishing (Section 2)
-- Daily dashboard view ("Today's Posts")
-- Post modal: caption review + media upload → Cloudflare R2
-- Publish to Facebook, Instagram, TikTok, LinkedIn
-- Status tracking and error handling
+### Phase 4 — Media & Publishing ✅ DONE
+- Today dashboard, publish modal, media upload
+- Facebook, Instagram, TikTok, LinkedIn publishing
+- Presigned URLs for video uploads (bypasses Vercel 4.5 MB limit)
 
-### Phase 5 — Daily Notifications
-- Vercel Cron Job → daily email via Gmail
+### Phase 5 — Daily Notifications ✅ DONE
+- Vercel Cron → daily email via Nodemailer + Gmail
 - User settings: notification email, time, timezone
 
-### Phase 6 — Polish & Multi-tenancy
-- Organizations (for bigger clients)
-- User roles and permissions
-- Retry failed posts
-- Analytics / posting history
+### Phase 6 — Polish & Deploy ✅ DONE
+- App live at https://socialplanner.okare.tr
+- All platform OAuth flows working
+- Error handling, retry, status tracking
 
 ---
 

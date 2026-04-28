@@ -1,7 +1,7 @@
 # Product Requirements Document — Social Media Posting Planner
 
 > **Audience:** developers, AI agents, and stakeholders picking up this project at any phase.
-> **Last updated:** Phase 1 scaffold.
+> **Last updated:** 2026-04-28 — all phases complete, app live at https://socialplanner.okare.tr
 
 ---
 
@@ -278,31 +278,46 @@ See `.env.example` in the project root for the full list. Key variables:
 
 | Phase | Goal | Status |
 |---|---|---|
-| 1 | Project scaffold, auth, PRD | In progress (this phase) |
-| 2 | Projects CRUD + document upload + Gemini extraction | Not started |
-| 3 | AI content generation (full plan) + editable calendar | Not started |
-| 4 | Media upload + publishing (Meta, TikTok, LinkedIn) | Not started |
-| 5 | Daily cron + notification emails | Not started |
-| 6 | Multi-tenancy + roles + polish | Not started |
+| 1 | Project scaffold, auth, PRD | ✅ Done |
+| 2 | Projects CRUD + document upload + Gemini extraction | ✅ Done |
+| 3 | AI content generation (full plan) + editable calendar | ✅ Done |
+| 4 | Media upload + publishing (Meta, TikTok, LinkedIn) | ✅ Done |
+| 5 | Daily cron + notification emails | ✅ Done |
+| 6 | Multi-tenancy + roles + polish + Vercel deploy | ✅ Done |
 
 ---
 
-## 8. Verification Checklist (End of Phase 1)
+## 8. Verification Checklist — Production (All Phases)
 
-- [ ] `npm run dev` starts without errors
-- [ ] Landing page at `/` redirects unauthenticated users to `/login`
-- [ ] Signup page creates a Supabase Auth user and sends confirmation email
-- [ ] Login page authenticates and redirects to `/dashboard`
-- [ ] Dashboard shows a placeholder "Welcome" view
-- [ ] Logout clears the session
-- [ ] `.env.local` is gitignored (not in `git status`)
-- [ ] Git initialized, initial commit pushed to GitHub
+- [x] App loads at `https://socialplanner.okare.tr`
+- [x] Auth: signup → email confirm → login → dashboard
+- [x] Projects: create, view, edit, delete
+- [x] Document upload → Gemini extraction → content plan generation
+- [x] Media upload: images via Vercel proxy, videos via presigned R2 URL
+- [x] Facebook publishing via Meta Graph API
+- [x] Instagram publishing with container polling (no 9007 errors)
+- [x] TikTok OAuth connect + publishing
+- [x] LinkedIn OAuth connect + publishing
+- [x] Daily cron email at 08:00 Istanbul time
+- [x] Settings: platform connect/disconnect, notification preferences
+- [x] `.env.local` is gitignored; all secrets in Vercel env vars
 
 ---
 
-## 9. Open Decisions / Deferred
+## 9. Resolved Decisions / Known Constraints
 
-- **Gemini model version**: defer to Phase 2 (pick fastest multimodal model available at build time)
-- **Document parsing**: Gemini handles PDF/images natively. For DOCX/XLSX/PPTX may need pre-parsing with `mammoth`/`xlsx`/`pptx-parser`. Decide in Phase 2 based on file types actually uploaded.
-- **LinkedIn OAuth flow**: defer until Community Management API access is approved (separate LinkedIn app required per LinkedIn policy). Keep Share on LinkedIn + Sign In with LinkedIn working from current app.
-- **Media format auto-conversion**: if user uploads wrong ratio/size, should app reject or auto-convert? Decide in Phase 4.
+- **Gemini model:** `gemini-1.5-flash` — fast, multimodal, handles PDF/DOCX/images natively.
+- **Document parsing:** Gemini handles PDF + images natively. DOCX files are pre-converted to text before sending to Gemini.
+- **LinkedIn OAuth:** Using Share on LinkedIn (OAuth 2.0). Community Management API not required for current scope. Production callback URL must be registered in LinkedIn Developer Portal.
+- **Media format:** App validates file type on upload. Meta requires JPEG/PNG for images, MP4/MOV for reels. Videos uploaded via presigned R2 URLs (bypass Vercel 4.5 MB limit). No auto-conversion.
+- **Auth pattern:** All server/API routes use `getSession()` not `getUser()` — see `FIRST_READ_THIS.md` Section 5.1 for why this is critical with self-hosted Supabase + Cloudflare Tunnel.
+- **Instagram publishing:** All media containers (images + videos) must be polled until `status_code = FINISHED` before calling `media_publish`.
+
+## 10. Important Infrastructure Notes
+
+See `FIRST_READ_THIS.md` for full details. Critical points:
+
+- Supabase is self-hosted on Oracle Cloud VPS, exposed via Cloudflare Tunnel
+- Cloudflare Bot Fight Mode **must be OFF** for `okare.tr`
+- All API routes use `getSession()` not `getUser()`
+- Video uploads go direct browser → R2 via presigned URLs (Vercel 4.5 MB limit)

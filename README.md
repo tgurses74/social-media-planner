@@ -2,44 +2,64 @@
 
 A Next.js 16 web app that helps event managers plan and publish social media content across Facebook, Instagram, LinkedIn, and TikTok using AI.
 
-See [`docs/PRD.md`](./docs/PRD.md) for the full product spec.
+**Live:** https://socialplanner.okare.tr
+
+---
+
+## What it does
+
+1. **Plan** — Upload an event brief (PDF, DOCX, image). Gemini AI reads it and generates a full posting calendar with captions, hashtags, and media specs.
+2. **Execute** — Daily email digest lists today's posts. User opens the app, uploads media, and publishes to all platforms with one click.
+
+## Stack
+
+- **Next.js 16** (App Router) + TypeScript + Tailwind v4 + shadcn/ui — Vercel
+- **Supabase** — auth + Postgres (self-hosted at `supabase-social.okare.tr` via Cloudflare Tunnel on Oracle Cloud VPS)
+- **Cloudflare R2** — media storage (`media.okare.tr`)
+- **Google Gemini** — document reading and content generation
+- **Meta Graph API v25.0** — Facebook + Instagram publishing
+- **TikTok Content Posting API** — TikTok publishing
+- **LinkedIn Share API** — LinkedIn publishing
+- **Vercel Cron + Nodemailer** — daily notification emails
 
 ## Quick start
 
 ```bash
+git clone https://github.com/tgurses74/social-media-planner.git
+cd social-media-planner
 npm install
-cp .env.example .env.local   # then fill in the values
-npm run dev
+cp .env.example .env.local   # fill in all values
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — you'll be redirected to `/login`.
+## ⚠️ Read before coding
 
-## Stack
-- **Next.js 16** (App Router) + TypeScript + Tailwind v4 + shadcn/ui
-- **Supabase** — auth + Postgres (self-hosted at `supabase.okare.tr`)
-- **Cloudflare R2** — media storage (`media.okare.tr`)
-- **Google Gemini** — document reading and content generation
-- **Vercel Cron** — daily notification scheduling
-- **Nodemailer** — email via Gmail App Password
+**`FIRST_READ_THIS.md`** — critical infrastructure gotchas, troubleshooting guide, and workflow explanation. Required reading before making changes.
 
 ## Project structure
+
 ```
-app/            Next.js routes
+app/
   (auth)/       Login, signup, auth callback
-  (app)/        Authenticated app (dashboard, projects, settings)
-  api/          Route Handlers
-components/     React components
+  (app)/        Dashboard, projects, settings
+  api/          Route handlers (publish, upload, auth, cron)
+components/
   ui/           shadcn primitives
-lib/            Clients, utilities
-  supabase/     Browser + server Supabase clients
-docs/           PRD and architecture docs
-workflows/      Markdown SOPs (WAT framework)
-tools/          Dev-side scripts (Python / TS)
-proxy.ts        Next.js 16 auth middleware
+  projects/     Content plan calendar
+  dashboard/    Today's feed
+lib/            Clients (supabase, gemini, tiktok, linkedin, r2)
+docs/           PRD and setup docs
+workflows/      Automation SOPs (WAT framework)
+proxy.ts        Next.js auth middleware
 ```
 
 ## Documentation
-- [Product spec (PRD)](./docs/PRD.md)
-- [Agent instructions (WAT framework)](./CLAUDE.md)
-- [Technical infrastructure notes](./Technical%20Information%20That%20I%20have.md)
-- [Workflows](./workflows/README.md)
+
+| File | What it is |
+|---|---|
+| [`FIRST_READ_THIS.md`](./FIRST_READ_THIS.md) | **Start here** — full context, gotchas, troubleshooting |
+| [`docs/PRD.md`](./docs/PRD.md) | Full product spec and database schema |
+| [`summary.md`](./summary.md) | Current status and infrastructure details |
+| [`CLAUDE.md`](./CLAUDE.md) | AI agent operating instructions (WAT framework) |
+| [`workflows/`](./workflows/) | Markdown SOPs for each automation |
+| [`docs/SETUP_SUPABASE.md`](./docs/SETUP_SUPABASE.md) | Self-hosted Supabase recovery procedures |
