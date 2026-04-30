@@ -39,122 +39,111 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.75);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 2.5);
+  --radius-4xl: calc(var(--radius) * 3);
 }
 
-/* ── Light mode ─────────────────────────────────────── */
+/* ── Light mode — Notion warm neutrals ─────────────────────────────────────── */
 :root {
-  /* Core */
-  --background:         oklch(0.985 0.002 265);
-  --foreground:         oklch(0.13 0.012 265);
+  /* Core — pure white canvas, warm near-black text */
+  --background:         oklch(1 0 0);                    /* #ffffff */
+  --foreground:         oklch(0.13 0.008 60);            /* rgba(0,0,0,0.95) warm near-black */
 
-  /* Cards / Popovers */
+  /* Cards / Popovers — white surfaces */
   --card:               oklch(1 0 0);
-  --card-foreground:    oklch(0.13 0.012 265);
+  --card-foreground:    oklch(0.13 0.008 60);
   --popover:            oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.012 265);
+  --popover-foreground: oklch(0.13 0.008 60);
 
-  /* Primary — violet */
-  --primary:            oklch(0.47 0.22 273);
-  --primary-foreground: oklch(0.985 0 0);
+  /* Primary — Notion Blue #0075de */
+  --primary:            oklch(0.52 0.18 245);
+  --primary-foreground: oklch(1 0 0);
 
-  /* Secondary — soft violet tint */
-  --secondary:          oklch(0.94 0.03 273);
-  --secondary-foreground: oklch(0.32 0.12 273);
+  /* Secondary — warm white surface #f6f5f4 */
+  --secondary:          oklch(0.965 0.005 75);
+  --secondary-foreground: oklch(0.38 0.012 60);          /* #615d59 warm gray */
 
-  /* Muted — near-neutral */
-  --muted:              oklch(0.96 0.003 265);
-  --muted-foreground:   oklch(0.50 0.012 265);
+  /* Muted — subtle warm tint */
+  --muted:              oklch(0.965 0.005 75);
+  --muted-foreground:   oklch(0.63 0.012 60);            /* #a39e98 warm muted */
 
-  /* Accent — light violet hover surface */
-  --accent:             oklch(0.94 0.03 273);
-  --accent-foreground:  oklch(0.32 0.12 273);
+  /* Accent — light blue tint for hover */
+  --accent:             oklch(0.965 0.005 75);
+  --accent-foreground:  oklch(0.38 0.012 60);
 
   /* Semantic */
   --destructive:        oklch(0.577 0.245 27.325);
-  --border:             oklch(0.88 0.006 265);
-  --input:              oklch(0.88 0.006 265);
-  --ring:               oklch(0.55 0.18 273);
+  --border:             oklch(0.92 0.004 75);            /* rgba(0,0,0,0.1) warm */
+  --input:              oklch(0.92 0.004 75);
+  --ring:               oklch(0.52 0.18 245);            /* Notion Blue focus */
 
   /* Charts */
-  --chart-1: oklch(0.47 0.22 273);
-  --chart-2: oklch(0.60 0.18 220);
-  --chart-3: oklch(0.65 0.20 145);
-  --chart-4: oklch(0.72 0.18 55);
-  --chart-5: oklch(0.65 0.22 20);
+  --chart-1: oklch(0.52 0.18 245);
+  --chart-2: oklch(0.57 0.13 162);
+  --chart-3: oklch(0.60 0.12 72);
+  --chart-4: oklch(0.65 0.18 27);
+  --chart-5: oklch(0.62 0.15 310);
 
-  /* Radius */
-  --radius: 0.75rem;
+  /* Radius — 8px base */
+  --radius: 0.5rem;
 
-  /* Sidebar */
-  --sidebar:                    oklch(0.975 0.003 265);
-  --sidebar-foreground:         oklch(0.13 0.012 265);
-  --sidebar-primary:            oklch(0.47 0.22 273);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent:             oklch(0.94 0.03 273);
-  --sidebar-accent-foreground:  oklch(0.32 0.12 273);
-  --sidebar-border:             oklch(0.88 0.006 265);
-  --sidebar-ring:               oklch(0.55 0.18 273);
+  /* Sidebar — warm white #f6f5f4 */
+  --sidebar:                    oklch(0.965 0.005 75);
+  --sidebar-foreground:         oklch(0.13 0.008 60);
+  --sidebar-primary:            oklch(0.52 0.18 245);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:             oklch(0.94 0.006 75);
+  --sidebar-accent-foreground:  oklch(0.38 0.012 60);
+  --sidebar-border:             oklch(0.90 0.005 75);
+  --sidebar-ring:               oklch(0.52 0.18 245);
 }
 
-/* ── Dark mode — Colorffy scheme: #121212 surface, #151eca primary blue ── */
+/* ── Dark mode — warm dark, Notion Blue primary ─────────────────────────────── */
 .dark {
-  /* Core — pure neutral near-black (#121212), no violet tint */
-  --background:         oklch(0.09 0 0);
-  --foreground:         oklch(0.97 0 0);
+  --background:         oklch(0.12 0.003 60);            /* warm near-black */
+  --foreground:         oklch(0.95 0.003 75);            /* warm off-white */
 
-  /* Cards — #1e1e1e, clear +5 lightness step */
-  --card:               oklch(0.145 0 0);
-  --card-foreground:    oklch(0.97 0 0);
-  --popover:            oklch(0.18 0 0);
-  --popover-foreground: oklch(0.97 0 0);
+  --card:               oklch(0.16 0.004 60);
+  --card-foreground:    oklch(0.95 0.003 75);
+  --popover:            oklch(0.18 0.004 60);
+  --popover-foreground: oklch(0.95 0.003 75);
 
-  /* Primary — #151eca royal blue, H=245 so it reads clearly blue not violet */
-  --primary:            oklch(0.50 0.27 245);
-  --primary-foreground: oklch(0.98 0 0);
+  --primary:            oklch(0.56 0.18 245);            /* Notion Blue, slightly lighter */
+  --primary-foreground: oklch(1 0 0);
 
-  /* Secondary — deep blue-tinted surface */
-  --secondary:          oklch(0.18 0.028 245);
-  --secondary-foreground: oklch(0.90 0.05 245);
+  --secondary:          oklch(0.20 0.005 60);
+  --secondary-foreground: oklch(0.80 0.005 75);
 
-  /* Muted — neutral dark surface / helper text */
-  --muted:              oklch(0.18 0 0);
-  --muted-foreground:   oklch(0.58 0 0);
+  --muted:              oklch(0.20 0.004 60);
+  --muted-foreground:   oklch(0.55 0.006 75);
 
-  /* Accent — hover surface with blue warmth */
-  --accent:             oklch(0.20 0.025 245);
-  --accent-foreground:  oklch(0.92 0.05 245);
+  --accent:             oklch(0.22 0.006 245);
+  --accent-foreground:  oklch(0.88 0.008 245);
 
-  /* Semantic — Colorffy palette */
-  --destructive:        oklch(0.50 0.19 22);   /* #9c2121 */
-  --success:            oklch(0.57 0.13 162);  /* #22946e */
-  --warning:            oklch(0.60 0.12 72);   /* #a87a2a */
+  --destructive:        oklch(0.50 0.19 22);
   --border:             oklch(1 0 0 / 10%);
-  --input:              oklch(1 0 0 / 14%);
-  --ring:               oklch(0.52 0.25 245);
+  --input:              oklch(1 0 0 / 12%);
+  --ring:               oklch(0.56 0.18 245);
 
-  /* Charts — blue-anchored palette */
-  --chart-1: oklch(0.50 0.27 245);
+  --chart-1: oklch(0.56 0.18 245);
   --chart-2: oklch(0.57 0.13 162);
   --chart-3: oklch(0.60 0.12 72);
   --chart-4: oklch(0.50 0.19 22);
   --chart-5: oklch(0.70 0.18 210);
 
-  /* Sidebar — one step lighter than page bg */
-  --sidebar:                    oklch(0.115 0 0);
-  --sidebar-foreground:         oklch(0.97 0 0);
-  --sidebar-primary:            oklch(0.50 0.27 245);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent:             oklch(0.20 0.025 245);
-  --sidebar-accent-foreground:  oklch(0.92 0.05 245);
+  --sidebar:                    oklch(0.14 0.004 60);
+  --sidebar-foreground:         oklch(0.95 0.003 75);
+  --sidebar-primary:            oklch(0.56 0.18 245);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent:             oklch(0.22 0.006 245);
+  --sidebar-accent-foreground:  oklch(0.88 0.008 245);
   --sidebar-border:             oklch(1 0 0 / 8%);
-  --sidebar-ring:               oklch(0.52 0.25 245);
+  --sidebar-ring:               oklch(0.56 0.18 245);
 }
 
 @layer base {
