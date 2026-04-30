@@ -73,7 +73,7 @@ export default async function DashboardPage() {
   ).length;
 
   return (
-    <div className="flex flex-col gap-6 p-8 max-w-3xl">
+    <div className="app-page flex flex-col gap-6 p-8 max-w-3xl">
       <DashboardHeader dateEn={dateEn} dateTr={dateTr} pendingCount={pendingCount} />
       <TodayFeed initialPosts={posts} />
     </div>

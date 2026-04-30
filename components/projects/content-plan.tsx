@@ -442,12 +442,12 @@ export function ContentPlan({
                     </p>
                   )}
 
-                  <div className="flex items-center gap-2 text-base text-muted-foreground border-t border-border pt-3">
-                    <span>
+                  <div className="flex items-center gap-2 text-base text-muted-foreground border-t border-border pt-3 min-w-0">
+                    <span className="truncate min-w-0">
                       {post.media_spec.type} · {post.media_spec.ratio} · {post.media_spec.resolution}
                     </span>
                     {post.media_url && (
-                      <span className="text-green-400 font-semibold">{t.contentPlan.mediaReady}</span>
+                      <span className="text-green-400 font-semibold shrink-0">{t.contentPlan.mediaReady}</span>
                     )}
                   </div>
                 </div>
@@ -572,7 +572,7 @@ export function ContentPlan({
               />
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-wrap justify-end gap-2">
               <Button variant="outline" onClick={() => setEditPost(null)}>{t.contentPlan.cancel}</Button>
               <Button onClick={handleSaveEdit} disabled={saving || uploading}>
                 {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

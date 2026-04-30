@@ -4,6 +4,7 @@ import { LogoutButton } from "@/components/logout-button";
 import { NavLinks } from "@/components/nav-links";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { MobileNav } from "@/components/mobile-nav";
 
 export default async function AppLayout({
   children,
@@ -18,14 +19,19 @@ export default async function AppLayout({
 
   return (
     <div className="flex min-h-screen flex-1">
-      <aside className="w-64 border-r border-border bg-sidebar flex flex-col p-4 gap-2 shrink-0">
+      <aside className="hidden md:flex w-64 border-r border-border bg-sidebar flex-col p-4 gap-2 shrink-0">
 
         {/* Logo */}
-        <Link href="/dashboard" className="flex items-center gap-3 px-2 py-3 mb-1 group">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold text-base shadow-md">
-            SM
+        <Link href="/dashboard" className="flex items-center gap-2.5 px-2 py-3 mb-1 group">
+          <img
+            src="/logo.svg"
+            alt="SM Planner"
+            style={{ width: "38px", height: "38px", borderRadius: "8px", flexShrink: 0 }}
+          />
+          <div style={{ lineHeight: 1.2 }}>
+            <span className="text-sm font-bold tracking-tight block">SM Planner</span>
+            <span className="text-[11px] text-muted-foreground font-medium">by Openborders</span>
           </div>
-          <span className="text-lg font-bold tracking-tight">SM Planner</span>
         </Link>
 
         {/* Nav */}
@@ -42,7 +48,10 @@ export default async function AppLayout({
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto">{children}</main>
+      <div className="flex flex-col flex-1 min-w-0">
+        <MobileNav userEmail={user?.email ?? null} />
+        <main className="flex-1 overflow-auto">{children}</main>
+      </div>
     </div>
   );
 }

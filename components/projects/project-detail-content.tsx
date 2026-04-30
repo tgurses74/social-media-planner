@@ -54,7 +54,7 @@ export function ProjectDetailContent({
   const { t } = useLanguage();
 
   return (
-    <div className="flex flex-col gap-6 p-8">
+    <div className="app-page flex flex-col gap-6 p-8">
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/projects">
@@ -64,12 +64,12 @@ export function ProjectDetailContent({
         </Button>
       </div>
 
-      <div className="flex items-start justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-4xl font-semibold tracking-tight">{project.name}</h1>
+      <div className="flex items-start justify-between flex-wrap gap-4">
+        <div className="flex flex-col gap-1 min-w-0 flex-1">
+          <h1 className="text-2xl sm:text-4xl font-semibold tracking-tight break-words">{project.name}</h1>
           <p className="text-lg text-muted-foreground">{project.event_name}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           <Badge variant={project.status === "active" ? "default" : "secondary"}>
             {project.status}
           </Badge>
@@ -77,7 +77,7 @@ export function ProjectDetailContent({
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">

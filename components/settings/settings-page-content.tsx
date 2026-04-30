@@ -21,7 +21,7 @@ export function SettingsPageContent({ tokens, currentEmail, currentTime }: Props
   const { t } = useLanguage();
 
   return (
-    <div className="flex flex-col gap-6 p-8 max-w-2xl">
+    <div className="app-page flex flex-col gap-6 p-8 max-w-2xl">
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">{t.settings.heading}</h1>
         <p className="text-muted-foreground mt-1">{t.settings.subtitle}</p>

@@ -20,8 +20,8 @@ export function ProjectsPageContent({ projects }: { projects: Project[] }) {
   const { t } = useLanguage();
 
   return (
-    <div className="flex flex-col gap-6 p-8">
-      <div className="flex items-center justify-between">
+    <div className="app-page flex flex-col gap-6 p-8">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">{t.projects.heading}</h1>
           <p className="text-muted-foreground">{t.projects.subtitle}</p>
