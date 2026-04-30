@@ -13,12 +13,14 @@ export function DashboardHeader({ dateEn, dateTr, pendingCount }: Props) {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold tracking-tight">{t.dashboard.heading}</h1>
-      <p className="text-base text-muted-foreground mt-1.5">
+      <h1 style={{ fontSize: "40px", fontWeight: 700, letterSpacing: "-1px", color: "rgba(0,0,0,0.95)", lineHeight: 1.15, margin: 0 }}>
+        {t.dashboard.heading}
+      </h1>
+      <p style={{ fontSize: "17px", color: "#615d59", margin: "10px 0 0", lineHeight: 1.5 }}>
         {t.locale === "tr" ? dateTr : dateEn}
         {pendingCount > 0 && (
-          <span className="ml-2 text-foreground font-medium">
-            {t.dashboard.postsNeedAction(pendingCount)}
+          <span style={{ marginLeft: "8px", fontWeight: 600, color: "rgba(0,0,0,0.85)" }}>
+            · {t.dashboard.postsNeedAction(pendingCount)}
           </span>
         )}
       </p>

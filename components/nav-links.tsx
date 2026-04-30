@@ -25,13 +25,13 @@ export function NavLinks() {
             key={href}
             href={href}
             className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-3.5 text-[13px] font-bold uppercase tracking-widest transition-all duration-150",
+              "flex items-center gap-2.5 rounded px-2.5 py-2 text-sm font-medium transition-colors duration-100",
               isActive
-                ? "bg-primary/12 text-primary"
-                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
           >
-            <Icon className={cn("h-5 w-5 shrink-0", isActive ? "text-primary" : "")} />
+            <Icon className="h-4 w-4 shrink-0" />
             {label}
           </Link>
         );

@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ConnectedAccounts } from "@/components/settings/connected-accounts";
 import { NotificationSettings } from "@/components/settings/notification-settings";
 import { useLanguage } from "@/lib/i18n/language-context";
@@ -17,33 +16,43 @@ interface Props {
   currentTime: string | null;
 }
 
+const SHADOW = "rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.85px, rgba(0,0,0,0.02) 0px 0.8px 2.93px, rgba(0,0,0,0.01) 0px 0.175px 1.04px";
+
 export function SettingsPageContent({ tokens, currentEmail, currentTime }: Props) {
   const { t } = useLanguage();
 
   return (
-    <div className="app-page flex flex-col gap-6 p-8 max-w-2xl">
+    <div className="app-page" style={{ display: "flex", flexDirection: "column", gap: "28px", padding: "48px 48px 64px", maxWidth: "860px" }}>
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{t.settings.heading}</h1>
-        <p className="text-muted-foreground mt-1">{t.settings.subtitle}</p>
+        <h1 style={{ fontSize: "40px", fontWeight: 700, letterSpacing: "-1px", color: "rgba(0,0,0,0.95)", lineHeight: 1.15, margin: 0 }}>
+          {t.settings.heading}
+        </h1>
+        <p style={{ fontSize: "17px", color: "#615d59", margin: "10px 0 0", lineHeight: 1.5 }}>
+          {t.settings.subtitle}
+        </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t.settings.connectedAccounts}</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div style={{ borderRadius: "14px", border: "1px solid rgba(0,0,0,0.1)", background: "#fff", boxShadow: SHADOW }}>
+        <div style={{ padding: "22px 28px", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 700, letterSpacing: "-0.4px", color: "rgba(0,0,0,0.92)", margin: 0 }}>
+            {t.settings.connectedAccounts}
+          </h2>
+        </div>
+        <div style={{ padding: "22px 28px" }}>
           <ConnectedAccounts tokens={tokens} />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">{t.settings.dailyDigest}</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div style={{ borderRadius: "14px", border: "1px solid rgba(0,0,0,0.1)", background: "#fff", boxShadow: SHADOW }}>
+        <div style={{ padding: "22px 28px", borderBottom: "1px solid rgba(0,0,0,0.07)" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 700, letterSpacing: "-0.4px", color: "rgba(0,0,0,0.92)", margin: 0 }}>
+            {t.settings.dailyDigest}
+          </h2>
+        </div>
+        <div style={{ padding: "22px 28px" }}>
           <NotificationSettings currentEmail={currentEmail} currentTime={currentTime} />
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

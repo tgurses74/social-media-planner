@@ -271,13 +271,13 @@ export function TodayFeed({ initialPosts }: Props) {
 
   if (posts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16 text-center gap-3">
-        <CheckCircle className="h-10 w-10 text-muted-foreground" />
+      <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-20 text-center gap-4">
+        <CheckCircle className="h-10 w-10 text-muted-foreground/40" />
         <div>
-          <p className="text-lg font-bold">{t.dashboard.nothingScheduled}</p>
-          <p className="text-base text-muted-foreground mt-1.5">
+          <p style={{ fontSize: "18px", fontWeight: 600, color: "rgba(0,0,0,0.85)", margin: 0 }}>{t.dashboard.nothingScheduled}</p>
+          <p style={{ fontSize: "16px", color: "#615d59", marginTop: "8px" }}>
             {t.dashboard.checkProjects}{" "}
-            <Link href="/projects" className="underline underline-offset-2">
+            <Link href="/projects" className="underline underline-offset-2 text-foreground hover:text-primary transition-colors">
               {t.dashboard.projects}
             </Link>{" "}
             {t.dashboard.toPlан}
@@ -299,56 +299,56 @@ export function TodayFeed({ initialPosts }: Props) {
       {Array.from(byProject.entries()).map(([projectId, { name, posts: projectPosts }]) => (
         <div key={projectId} className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold tracking-tight">{name}</h2>
+            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px", color: "rgba(0,0,0,0.9)", margin: 0 }}>{name}</h2>
             <Link
               href={`/projects/${projectId}`}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
-              {t.dashboard.openProject}
+              {t.dashboard.openProject} →
             </Link>
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {projectPosts.map((post) => (
               <div
                 key={post.id}
-                className="flex items-center gap-3 rounded-xl border bg-card px-5 py-4 shadow-sm"
+                className="flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-4 hover:border-border/80 transition-colors"
               >
-                <span className="w-14 shrink-0 text-base text-muted-foreground tabular-nums font-mono font-semibold">
+                <span className="w-12 shrink-0 tabular-nums font-medium" style={{ fontSize: "14px", color: "#a39e98" }}>
                   {post.scheduled_time ? post.scheduled_time.slice(0, 5) : "—"}
                 </span>
 
                 <Badge
                   variant="outline"
-                  className={`shrink-0 capitalize text-base font-semibold px-3 py-0.5 ${PLATFORM_COLORS[post.platform] ?? ""}`}
+                  className={`shrink-0 capitalize font-semibold px-2.5 py-1 text-xs ${PLATFORM_COLORS[post.platform] ?? ""}`}
                 >
                   {post.platform}
                 </Badge>
 
-                <Badge variant="outline" className="shrink-0 capitalize text-base px-3 py-0.5">
+                <Badge variant="outline" className="shrink-0 capitalize text-xs font-normal px-2.5 py-1">
                   {post.post_type}
                 </Badge>
 
-                <p className="flex-1 min-w-0 text-base text-muted-foreground truncate">
+                <p className="flex-1 min-w-0 truncate" style={{ fontSize: "15px", color: "#615d59" }}>
                   {post.caption}
                 </p>
 
                 <Badge
-                  className={`shrink-0 text-base font-semibold px-3 py-0.5 capitalize ${STATUS_COLORS[post.status] ?? ""}`}
+                  className={`shrink-0 font-semibold px-2.5 py-1 text-xs capitalize ${STATUS_COLORS[post.status] ?? ""}`}
                 >
                   {post.status.replace("_", " ")}
                 </Badge>
 
-                <div className="shrink-0 flex items-center gap-1">
+                <div className="shrink-0 flex items-center gap-0.5">
                   {["draft", "pending", "failed"].includes(post.status) && (
                     <Button
                       size="sm"
                       variant="ghost"
-                      className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground hover:bg-muted"
+                      className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
                       title={t.dashboard.editAndPublish}
                       onClick={() => openEdit(post)}
                     >
-                      <Pencil className="h-5 w-5" />
+                      <Pencil className="h-3.5 w-3.5" />
                     </Button>
                   )}
                   {post.status === "media_ready" && PUBLISH_ENDPOINTS[post.platform] && (
@@ -356,24 +356,24 @@ export function TodayFeed({ initialPosts }: Props) {
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground hover:bg-muted"
+                        className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
                         title={t.dashboard.editAndPublish}
                         onClick={() => openEdit(post)}
                       >
-                        <Pencil className="h-5 w-5" />
+                        <Pencil className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         size="sm"
                         variant="ghost"
-                        className="h-9 w-9 p-0 text-primary hover:text-primary hover:bg-primary/10"
+                        className="h-7 w-7 p-0 text-primary hover:text-primary hover:bg-primary/10"
                         disabled={publishingId === post.id}
                         onClick={() => handlePublish(post)}
                         title={t.dashboard.publishNow}
                       >
                         {publishingId === post.id ? (
-                          <Loader2 className="h-5 w-5 animate-spin" />
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
                         ) : (
-                          <Send className="h-5 w-5" />
+                          <Send className="h-3.5 w-3.5" />
                         )}
                       </Button>
                     </>

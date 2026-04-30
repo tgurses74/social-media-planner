@@ -1,27 +1,43 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n/language-context";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
   const { t } = useLanguage();
-  const [mounted, setMounted] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
+  useEffect(() => {
+    const stored = localStorage.getItem("sm-theme");
+    if (stored === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+      setIsDark(true);
+    }
+  }, []);
 
-  const isDark = theme === "dark";
+  function toggle() {
+    const next = !isDark;
+    setIsDark(next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+      localStorage.setItem("sm-theme", "dark");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("sm-theme", "light");
+    }
+  }
 
   return (
     <Button
       variant="ghost"
       size="sm"
       className="w-full justify-start gap-2.5 px-3 text-muted-foreground hover:text-foreground"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={toggle}
     >
       {isDark ? (
         <>
