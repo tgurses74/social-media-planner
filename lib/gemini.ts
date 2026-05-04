@@ -215,6 +215,15 @@ Organic posting window: ${project.timeframe_start} to ${project.timeframe_end}
 Instagram posts in the content plan:
 ${postList || "No Instagram posts yet — propose based on the event details."}
 
+Generate 3 realistic budget tiers (small, medium, large) calibrated to this specific event. Consider:
+- Event niche and audience competitiveness (sports camp, concert, corporate, etc.)
+- Geographic reach (local, national, international)
+- Realistic Meta Ads CPM/CPC for this audience segment
+- Campaign duration relative to the event date
+- Expected conversion rate for this event type
+
+Tiers must have meaningfully different budgets, durations, and strategies. Derive all numbers from the event context — do NOT use generic defaults.
+
 Return ONLY valid JSON, no markdown fences:
 {
   "selected_post": {
@@ -233,25 +242,25 @@ Return ONLY valid JSON, no markdown fences:
   "campaign_rationale": "one sentence: why this objective fits the event goal",
   "budgets": [
     {
-      "target_connections": 250,
-      "budget_usd": 250,
-      "daily_budget_usd": 35,
-      "duration_days": 7,
-      "strategy": "concise targeting and creative strategy for this budget tier"
+      "target_connections": <calculate based on event>,
+      "budget_usd": <calculate based on event>,
+      "daily_budget_usd": <budget_usd divided by duration_days>,
+      "duration_days": <calculate based on event>,
+      "strategy": "specific strategy for this tier based on the event niche and audience"
     },
     {
-      "target_connections": 1000,
-      "budget_usd": 1000,
-      "daily_budget_usd": 71,
-      "duration_days": 14,
-      "strategy": "concise targeting and creative strategy for this budget tier"
+      "target_connections": <calculate based on event>,
+      "budget_usd": <calculate based on event>,
+      "daily_budget_usd": <budget_usd divided by duration_days>,
+      "duration_days": <calculate based on event>,
+      "strategy": "specific strategy for this tier based on the event niche and audience"
     },
     {
-      "target_connections": 5000,
-      "budget_usd": 5000,
-      "daily_budget_usd": 167,
-      "duration_days": 30,
-      "strategy": "concise targeting and creative strategy for this budget tier"
+      "target_connections": <calculate based on event>,
+      "budget_usd": <calculate based on event>,
+      "daily_budget_usd": <budget_usd divided by duration_days>,
+      "duration_days": <calculate based on event>,
+      "strategy": "specific strategy for this tier based on the event niche and audience"
     }
   ]
 }`;
