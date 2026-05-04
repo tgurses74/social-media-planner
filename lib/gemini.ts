@@ -2,6 +2,32 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+export interface MetaAdsBudget {
+  target_connections: number;
+  budget_usd: number;
+  daily_budget_usd: number;
+  duration_days: number;
+  strategy: string;
+}
+
+export interface MetaAdsPlan {
+  selected_post: {
+    caption_preview: string;
+    post_type: string;
+    scheduled_date: string;
+    rationale: string;
+  };
+  ad_time_window: {
+    start: string;
+    end: string;
+    rationale: string;
+  };
+  keywords: string[];
+  campaign_type: string;
+  campaign_rationale: string;
+  budgets: MetaAdsBudget[];
+}
+
 export interface ExtractedEventInfo {
   event_name: string | null;
   event_date: string | null;
@@ -153,4 +179,86 @@ Rules:
   const match = text.match(/\[[\s\S]*\]/);
   if (!match) throw new Error("Gemini did not return a valid JSON array");
   return JSON.parse(match[0]) as GeneratedPost[];
+}
+
+export async function generateMetaAdsPlan(
+  project: {
+    event_name: string;
+    event_date: string;
+    description: string | null;
+    timeframe_start: string;
+    timeframe_end: string;
+  },
+  instagramPosts: Array<{
+    scheduled_date: string;
+    post_type: string;
+    caption: string;
+  }>,
+): Promise<MetaAdsPlan> {
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.5-flash",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    generationConfig: { thinkingConfig: { thinkingBudget: 0 } } as any,
+  });
+
+  const postList = instagramPosts
+    .map((p, i) => `${i + 1}. [${p.post_type}] ${p.scheduled_date}: ${p.caption.substring(0, 150)}`)
+    .join("\n");
+
+  const prompt = `You are a Meta Ads strategist. Create a paid Instagram ad proposal for this event campaign.
+
+Event: ${project.event_name}
+Event Date: ${project.event_date}
+Description: ${project.description ?? "Not provided"}
+Organic posting window: ${project.timeframe_start} to ${project.timeframe_end}
+
+Instagram posts in the content plan:
+${postList || "No Instagram posts yet — propose based on the event details."}
+
+Return ONLY valid JSON, no markdown fences:
+{
+  "selected_post": {
+    "caption_preview": "first 120 characters of the best post caption for an ad",
+    "post_type": "post|story|reel|carousel",
+    "scheduled_date": "YYYY-MM-DD of that post",
+    "rationale": "one sentence: why this post converts best as a paid ad"
+  },
+  "ad_time_window": {
+    "start": "YYYY-MM-DD",
+    "end": "YYYY-MM-DD",
+    "rationale": "one sentence: optimal run window relative to the event date"
+  },
+  "keywords": ["up to 10 interest/behaviour keywords Meta Ads would target"],
+  "campaign_type": "BRAND_AWARENESS|REACH|TRAFFIC|ENGAGEMENT|LEAD_GENERATION|CONVERSIONS",
+  "campaign_rationale": "one sentence: why this objective fits the event goal",
+  "budgets": [
+    {
+      "target_connections": 250,
+      "budget_usd": 250,
+      "daily_budget_usd": 35,
+      "duration_days": 7,
+      "strategy": "concise targeting and creative strategy for this budget tier"
+    },
+    {
+      "target_connections": 1000,
+      "budget_usd": 1000,
+      "daily_budget_usd": 71,
+      "duration_days": 14,
+      "strategy": "concise targeting and creative strategy for this budget tier"
+    },
+    {
+      "target_connections": 5000,
+      "budget_usd": 5000,
+      "daily_budget_usd": 167,
+      "duration_days": 30,
+      "strategy": "concise targeting and creative strategy for this budget tier"
+    }
+  ]
+}`;
+
+  const result = await model.generateContent(prompt);
+  const text = result.response.text();
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error("Gemini did not return valid JSON for ads plan");
+  return JSON.parse(match[0]) as MetaAdsPlan;
 }

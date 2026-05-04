@@ -6,6 +6,7 @@ import { ArrowLeft, FileText } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { ContentPlan } from "@/components/projects/content-plan";
 import { ProjectActions } from "@/components/projects/project-actions";
+import { MetaAdsPlan } from "@/components/projects/meta-ads-plan";
 
 interface Document {
   id: string;
@@ -40,6 +41,8 @@ interface Project {
   timeframe_start: string;
   timeframe_end: string;
   event_documents: Document[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  meta_ads_plan: any | null;
 }
 
 const SHADOW = "rgba(0,0,0,0.04) 0px 4px 18px, rgba(0,0,0,0.027) 0px 2.025px 7.85px, rgba(0,0,0,0.02) 0px 0.8px 2.93px, rgba(0,0,0,0.01) 0px 0.175px 1.04px";
@@ -149,6 +152,9 @@ export function ProjectDetailContent({
           </div>
         </div>
       )}
+
+      {/* Meta Ads Proposal */}
+      <MetaAdsPlan projectId={project.id} initialPlan={project.meta_ads_plan ?? null} />
 
       {/* Content plan */}
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>

@@ -92,6 +92,21 @@ export function TodayFeed({ initialPosts }: Props) {
   const [modalError, setModalError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const todayStr = new Date().toISOString().split("T")[0];
+
+  function formatDateLabel(dateStr: string): string {
+    if (dateStr === todayStr) return t.dashboard.today;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yStr = yesterday.toISOString().split("T")[0];
+    if (dateStr === yStr) return t.dashboard.yesterday;
+    return new Date(dateStr + "T12:00:00").toLocaleDateString(t.dateLocale, {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+  }
+
   function openEdit(post: Post) {
     setEditPost(post);
     setEditCaption(post.caption);
@@ -260,14 +275,19 @@ export function TodayFeed({ initialPosts }: Props) {
     }
   }
 
-  // Group by project
-  const byProject = new Map<string, { name: string; posts: Post[] }>();
+  // Group by date (descending: today first), then by project within each date
+  const byDate = new Map<string, Map<string, { name: string; posts: Post[] }>>();
   for (const post of posts) {
-    if (!byProject.has(post.project_id)) {
-      byProject.set(post.project_id, { name: post.project_name, posts: [] });
+    if (!byDate.has(post.scheduled_date)) {
+      byDate.set(post.scheduled_date, new Map());
     }
-    byProject.get(post.project_id)!.posts.push(post);
+    const projectMap = byDate.get(post.scheduled_date)!;
+    if (!projectMap.has(post.project_id)) {
+      projectMap.set(post.project_id, { name: post.project_name, posts: [] });
+    }
+    projectMap.get(post.project_id)!.posts.push(post);
   }
+  const sortedDates = Array.from(byDate.keys()).sort((a, b) => b.localeCompare(a));
 
   if (posts.length === 0) {
     return (
@@ -288,7 +308,7 @@ export function TodayFeed({ initialPosts }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
@@ -296,94 +316,137 @@ export function TodayFeed({ initialPosts }: Props) {
         </Alert>
       )}
 
-      {Array.from(byProject.entries()).map(([projectId, { name, posts: projectPosts }]) => (
-        <div key={projectId} className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px", color: "rgba(0,0,0,0.9)", margin: 0 }}>{name}</h2>
-            <Link
-              href={`/projects/${projectId}`}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              {t.dashboard.openProject} →
-            </Link>
-          </div>
+      {sortedDates.map((dateStr) => {
+        const isToday = dateStr === todayStr;
+        const projectMap = byDate.get(dateStr)!;
+        const label = formatDateLabel(dateStr);
 
-          <div className="flex flex-col gap-2">
-            {projectPosts.map((post) => (
-              <div
-                key={post.id}
-                className="flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-4 hover:border-border/80 transition-colors"
+        return (
+          <div key={dateStr} className="flex flex-col gap-4">
+            {/* Date header */}
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <span
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  letterSpacing: "0.4px",
+                  textTransform: "uppercase",
+                  color: isToday ? "rgba(0,0,0,0.75)" : "#a39e98",
+                  whiteSpace: "nowrap",
+                }}
               >
-                <span className="w-12 shrink-0 tabular-nums font-medium" style={{ fontSize: "14px", color: "#a39e98" }}>
-                  {post.scheduled_time ? post.scheduled_time.slice(0, 5) : "—"}
+                {label}
+              </span>
+              <div style={{ flex: 1, height: "1px", background: "rgba(0,0,0,0.07)" }} />
+              {!isToday && (
+                <span
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 600,
+                    padding: "2px 8px",
+                    borderRadius: "9999px",
+                    background: "rgba(239,68,68,0.08)",
+                    color: "#ef4444",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  overdue
                 </span>
+              )}
+            </div>
 
-                <Badge
-                  variant="outline"
-                  className={`shrink-0 capitalize font-semibold px-2.5 py-1 text-xs ${PLATFORM_COLORS[post.platform] ?? ""}`}
-                >
-                  {post.platform}
-                </Badge>
+            {/* Projects within this date */}
+            {Array.from(projectMap.entries()).map(([projectId, { name, posts: projectPosts }]) => (
+              <div key={projectId} className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <h2 style={{ fontSize: "18px", fontWeight: 700, letterSpacing: "-0.3px", color: "rgba(0,0,0,0.9)", margin: 0 }}>{name}</h2>
+                  <Link
+                    href={`/projects/${projectId}`}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {t.dashboard.openProject}
+                  </Link>
+                </div>
 
-                <Badge variant="outline" className="shrink-0 capitalize text-xs font-normal px-2.5 py-1">
-                  {post.post_type}
-                </Badge>
-
-                <p className="flex-1 min-w-0 truncate" style={{ fontSize: "15px", color: "#615d59" }}>
-                  {post.caption}
-                </p>
-
-                <Badge
-                  className={`shrink-0 font-semibold px-2.5 py-1 text-xs capitalize ${STATUS_COLORS[post.status] ?? ""}`}
-                >
-                  {post.status.replace("_", " ")}
-                </Badge>
-
-                <div className="shrink-0 flex items-center gap-0.5">
-                  {["draft", "pending", "failed"].includes(post.status) && (
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-                      title={t.dashboard.editAndPublish}
-                      onClick={() => openEdit(post)}
+                <div className="flex flex-col gap-2">
+                  {projectPosts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-4 hover:border-border/80 transition-colors"
                     >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                  )}
-                  {post.status === "media_ready" && PUBLISH_ENDPOINTS[post.platform] && (
-                    <>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
-                        title={t.dashboard.editAndPublish}
-                        onClick={() => openEdit(post)}
+                      <span className="w-12 shrink-0 tabular-nums font-medium" style={{ fontSize: "14px", color: "#a39e98" }}>
+                        {post.scheduled_time ? post.scheduled_time.slice(0, 5) : "—"}
+                      </span>
+
+                      <Badge
+                        variant="outline"
+                        className={`shrink-0 capitalize font-semibold px-2.5 py-1 text-xs ${PLATFORM_COLORS[post.platform] ?? ""}`}
                       >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-7 w-7 p-0 text-primary hover:text-primary hover:bg-primary/10"
-                        disabled={publishingId === post.id}
-                        onClick={() => handlePublish(post)}
-                        title={t.dashboard.publishNow}
+                        {post.platform}
+                      </Badge>
+
+                      <Badge variant="outline" className="shrink-0 capitalize text-xs font-normal px-2.5 py-1">
+                        {post.post_type}
+                      </Badge>
+
+                      <p className="flex-1 min-w-0 truncate" style={{ fontSize: "15px", color: "#615d59" }}>
+                        {post.caption}
+                      </p>
+
+                      <Badge
+                        className={`shrink-0 font-semibold px-2.5 py-1 text-xs capitalize ${STATUS_COLORS[post.status] ?? ""}`}
                       >
-                        {publishingId === post.id ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          <Send className="h-3.5 w-3.5" />
+                        {post.status.replace("_", " ")}
+                      </Badge>
+
+                      <div className="shrink-0 flex items-center gap-0.5">
+                        {["draft", "pending", "failed"].includes(post.status) && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                            title={t.dashboard.editAndPublish}
+                            onClick={() => openEdit(post)}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
                         )}
-                      </Button>
-                    </>
-                  )}
+                        {post.status === "media_ready" && PUBLISH_ENDPOINTS[post.platform] && (
+                          <>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-muted-foreground hover:text-foreground"
+                              title={t.dashboard.editAndPublish}
+                              onClick={() => openEdit(post)}
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0 text-primary hover:text-primary hover:bg-primary/10"
+                              disabled={publishingId === post.id}
+                              onClick={() => handlePublish(post)}
+                              title={t.dashboard.publishNow}
+                            >
+                              {publishingId === post.id ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                <Send className="h-3.5 w-3.5" />
+                              )}
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Edit / upload / publish modal */}
       <Dialog open={!!editPost} onOpenChange={(open) => { if (!open) setEditPost(null); }}>

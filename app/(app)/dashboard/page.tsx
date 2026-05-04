@@ -24,32 +24,45 @@ export default async function DashboardPage() {
     year: "numeric",
   });
 
-  // Fetch today's posts across all the user's projects
-  const { data: rows } = await supabase
-    .from("posts")
-    .select(`
+  const SELECT_FIELDS = `
+    id,
+    platform,
+    post_type,
+    caption,
+    hashtags,
+    scheduled_date,
+    scheduled_time,
+    status,
+    media_url,
+    media_spec,
+    projects!inner (
       id,
-      platform,
-      post_type,
-      caption,
-      hashtags,
-      scheduled_date,
-      scheduled_time,
-      status,
-      media_url,
-      media_spec,
-      projects!inner (
-        id,
-        name,
-        user_id
-      )
-    `)
+      name,
+      user_id
+    )
+  `;
+
+  // Today's posts: all active statuses
+  const { data: todayRows } = await supabase
+    .from("posts")
+    .select(SELECT_FIELDS)
     .eq("scheduled_date", today)
     .not("status", "in", '("published","cancelled")')
     .order("scheduled_time", { ascending: true, nullsFirst: false });
 
+  // Past posts: only draft and media_ready (not yet actioned before today)
+  const { data: pastRows } = await supabase
+    .from("posts")
+    .select(SELECT_FIELDS)
+    .lt("scheduled_date", today)
+    .in("status", ["draft", "media_ready"])
+    .order("scheduled_date", { ascending: false })
+    .order("scheduled_time", { ascending: true, nullsFirst: false });
+
+  const allRows = [...(todayRows ?? []), ...(pastRows ?? [])];
+
   // Flatten the joined project fields for the client component
-  const posts = (rows ?? []).map((row) => {
+  const posts = allRows.map((row) => {
     const project = (row.projects as unknown) as { id: string; name: string; user_id: string };
     return {
       id: row.id,
