@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const r2 = new S3Client({
@@ -24,6 +24,21 @@ export async function uploadToR2(
     }),
   );
   return `${process.env.NEXT_PUBLIC_R2_PUBLIC_URL}/${key}`;
+}
+
+export async function deleteFromR2(key: string): Promise<void> {
+  try {
+    await r2.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Key: key,
+      }),
+    );
+  } catch (err: unknown) {
+    const e = err as { name?: string; $metadata?: { httpStatusCode?: number } };
+    if (e?.name === "NoSuchKey" || e?.$metadata?.httpStatusCode === 404) return;
+    throw err;
+  }
 }
 
 /** Returns a short-lived presigned PUT URL for direct browser → R2 uploads (videos). */
